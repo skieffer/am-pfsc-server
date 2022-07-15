@@ -1,0 +1,7 @@
+# Dev requirements that are being installed locally,
+# i.e. from a neighboring directory, during development.
+
+-e ../pfsc-test-modules/
+-e ../pfsc-examp
+-e ../displaylang
+-e ../sympy

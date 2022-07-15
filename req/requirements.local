@@ -1,0 +1,4 @@
+# Run requirements that are being installed locally,
+# i.e. from a neighboring directory, during development.
+
+-e ../pfsc-util

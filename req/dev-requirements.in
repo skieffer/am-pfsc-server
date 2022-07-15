@@ -1,0 +1,12 @@
+# Top-level dev requirements
+#   These packages are useful or required in development, but are not
+#   necessary for a working app.
+
+# This line ensures consistency with the run requirements:
+-c requirements.txt
+
+pip-tools==6.6.2
+pytest==6.2.3
+pytest-cov==2.11.1
+rq-dashboard==0.6.1
+typeguard==2.13.3
