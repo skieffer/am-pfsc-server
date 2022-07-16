@@ -29,7 +29,7 @@ from pfsc.constants import REDIS_CHANNEL, ISE_PREFIX
 from pfsc.excep import PfscExcep, PECode
 from config import config_lookup, ProductionConfig
 
-__version__ = '0.22.11'
+__version__ = '0.22.12-dev'
 
 socketio = SocketIO()
 pfsc_cli = AppGroup('pfsc')
