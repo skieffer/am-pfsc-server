@@ -463,7 +463,7 @@ class Config:
     EMAIL_TEMPLATE_DIR = os.getenv("EMAIL_TEMPLATE_DIR", "")
 
     # If you choose to use the dummy templates for email -- or even if you use
-    # some of the same format fields in your own, custom templates -- the
+    # some of the same format fields in your own custom templates -- the
     # following vars help you customize your emails.
     # An image with your own branding to be displayed at the top of emails sent
     # to users:
@@ -505,8 +505,8 @@ class LocalDevConfig(DevelopmentConfig):
     For use during development, when the Flask app is running on the local
     host (as opposed to in a docker container -- see DockerDevConfig).
 
-    For example, this IS the right configuration for running unit tests
-    in an IDE or at the command line, but NOT for running tests in a web browser.
+    For example, this is the right configuration for running unit tests
+    in an IDE or at the command line, but not for running tests in a web browser.
     """
     TESTING = True
 
@@ -554,10 +554,6 @@ class DockerDevConfig(DevelopmentConfig):
     ISE_DEV_MODE = bool(int(os.getenv("ISE_DEV_MODE", 1)))
     BYPASS_CACHE_FOR_REPO_MODEL_LOAD = bool(int(os.getenv("BYPASS_CACHE_FOR_REPO_MODEL_LOAD", 1)))
     PFSC_MARKDOWN_ERR_MSG = int(os.getenv("PFSC_MARKDOWN_ERR_MSG", 1))
-    # Increasingly, we're switching from the one-container app to the multi-container
-    # deployment because we want to test things relating to log-ins. So for now,
-    # keeping PERSONAL_SERVER_MODE false seems like a more useful default.
-    #PERSONAL_SERVER_MODE = bool(int(os.getenv("PERSONAL_SERVER_MODE", 1)))
 
     PFSC_LIB_ROOT = "/home/pfsc/proofscape/lib"
     PFSC_BUILD_ROOT = "/home/pfsc/proofscape/build"
