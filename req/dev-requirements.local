@@ -2,6 +2,10 @@
 # i.e. from a neighboring directory, during development.
 
 -e ../pfsc-test-modules/
--e ../pfsc-examp
--e ../displaylang
--e ../sympy
+
+# Keeping in commented form some that we used to have. During development, may
+# once again need to install these editable, from local, working copy.
+
+#-e ../pfsc-examp
+#-e ../displaylang
+#-e ../sympy

@@ -314,6 +314,10 @@ mmh3==3.0.0 \
 neo4j==4.2.1 \
     --hash=sha256:b6c49fbd60426e268ed4afbd414766444fe70aee1ac0376a0c871d75526b8251
     # via -r requirements.in
+pfsc-util==0.22.7 \
+    --hash=sha256:4c8c3e8d2434c2cc3023292964c00566889a24a0f56e709d9e7567e7ec1fb40c \
+    --hash=sha256:7946b0703ea50d7c3adc9a77a10a97cbb78ff85b4163f99ca47612aa5249908c
+    # via -r requirements.in
 pottery==1.1.7 \
     --hash=sha256:23a83cde4e366416acd3c7e0e86958a4709c108b2113d72b92f9d0c5a458f65a \
     --hash=sha256:3765c5a8ebb8a41aa5364032bbc97698d6d624abc6c8d374c8aa386876a59d6f

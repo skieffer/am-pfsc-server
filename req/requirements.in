@@ -85,3 +85,6 @@ requests==2.25.1
 # BGSAVE capture all updates, in cases where RedisGraph is being used as the
 # graph database.
 tenacity==6.2.0
+
+# We have a utility library
+pfsc-util==0.22.7

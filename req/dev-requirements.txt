@@ -4,6 +4,11 @@
 #
 #    pip-compile --generate-hashes dev-requirements.in
 #
+alpinemath-sympy==0.10.3 \
+    --hash=sha256:3179d3f4c21257d9392b818093e12bf29b336abeaedbab8d229d12ee90b1b523
+    # via
+    #   -r dev-requirements.in
+    #   pfsc-examp
 arrow==1.2.2 \
     --hash=sha256:05caf1fd3d9a11a1135b2b6f09887421153b94558e5ef4d090b567b47173ac2b \
     --hash=sha256:d622c46ca681b5b3e3574fcb60a04e5cc81b9625112d5fb2b44220c36c892177
@@ -63,6 +68,13 @@ coverage==6.3.2 \
     --hash=sha256:f9987b0354b06d4df0f4d3e0ec1ae76d7ce7cbca9a2f98c25041eb79eec766f1 \
     --hash=sha256:fd9e830e9d8d89b20ab1e5af09b32d33e1a08ef4c4e14411e559556fd788e6b2
     # via pytest-cov
+displaylang==0.22.7 \
+    --hash=sha256:1d914afcca27b43fe4fe762f910017043e9805fc8aba63197425a109bcfdfc4f \
+    --hash=sha256:5d8e9c48279adc5b4485713a0cbb7a66a90acc8b3a2ad70e4cbbb9864241e671
+    # via
+    #   -r dev-requirements.in
+    #   alpinemath-sympy
+    #   pfsc-examp
 flask==2.1.2 \
     --hash=sha256:315ded2ddf8a6281567edb27393010fe3406188bafbfe65a3339d5787d89e477 \
     --hash=sha256:fad5b446feb0d6db6aec0c3184d16a8c1f6c3e464b511649c8918a9be100b4fe
@@ -91,6 +103,13 @@ jinja2==3.1.2 \
     # via
     #   -c requirements.txt
     #   flask
+    #   pfsc-examp
+lark067==0.6.7 \
+    --hash=sha256:3c482e6f33c173e884afa44cdd411b8af02c043dec2588511a4041f7edafc662 \
+    --hash=sha256:a4c0c1ca147546b56fbe544a0ca38f689c9de41d2f624b7988c09a943ee48ed3
+    # via
+    #   -c requirements.txt
+    #   pfsc-examp
 markupsafe==2.1.1 \
     --hash=sha256:0212a68688482dc52b2d45013df70d169f542b7394fc744c02a57374a4207003 \
     --hash=sha256:089cf3dbf0cd6c100f02945abeb18484bd1ee57a079aefd52cffd17fba910b88 \
@@ -135,6 +154,11 @@ markupsafe==2.1.1 \
     # via
     #   -c requirements.txt
     #   jinja2
+    #   pfsc-examp
+mpmath==1.2.1 \
+    --hash=sha256:604bc21bd22d2322a177c73bdb573994ef76e62edd595d17e00aff24b0667e5c \
+    --hash=sha256:79ffb45cf9f4b101a807595bcb3e72e0396202e0b1d25d689134b48c4216a81a
+    # via alpinemath-sympy
 packaging==21.3 \
     --hash=sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb \
     --hash=sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522
@@ -143,6 +167,17 @@ pep517==0.12.0 \
     --hash=sha256:931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0 \
     --hash=sha256:dd884c326898e2c6e11f9e0b64940606a93eb10ea022a2e067959f3a110cf161
     # via pip-tools
+pfsc-examp==0.22.7 \
+    --hash=sha256:38105847fb29608ddce0a2d209b5d66a18e0fda72bbb46d5c272f5cf1252e224 \
+    --hash=sha256:71f76f85b6d114a3e9b970a197888635f390d419969b315b69b275810805808b
+    # via -r dev-requirements.in
+pfsc-util==0.22.7 \
+    --hash=sha256:4c8c3e8d2434c2cc3023292964c00566889a24a0f56e709d9e7567e7ec1fb40c \
+    --hash=sha256:7946b0703ea50d7c3adc9a77a10a97cbb78ff85b4163f99ca47612aa5249908c
+    # via
+    #   -c requirements.txt
+    #   displaylang
+    #   pfsc-examp
 pip-tools==6.6.2 \
     --hash=sha256:6b486548e5a139e30e4c4a225b3b7c2d46942a9f6d1a91143c21b1de4d02fd9b \
     --hash=sha256:f638503a9f77d98d9a7d72584b1508d3f82ed019b8fab24f4e5ad078c1b8c95e
@@ -206,7 +241,9 @@ tomli==2.0.1 \
 typeguard==2.13.3 \
     --hash=sha256:00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4 \
     --hash=sha256:5e3e3be01e887e7eafae5af63d1f36c849aaa94e3a0112097312aabfa16284f1
-    # via -r dev-requirements.in
+    # via
+    #   -r dev-requirements.in
+    #   displaylang
 werkzeug==2.1.2 \
     --hash=sha256:1ce08e8093ed67d638d63879fd1ba3735817f7a80de3674d293f5984f25fb6e6 \
     --hash=sha256:72a4b735692dd3135217911cbeaa1be5fa3f62bffb8745c5215420a03dc55255

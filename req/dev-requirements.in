@@ -10,3 +10,7 @@ pytest==6.2.3
 pytest-cov==2.11.1
 rq-dashboard==0.6.1
 typeguard==2.13.3
+
+pfsc-examp==0.22.7
+displaylang==0.22.7
+alpinemath-sympy==0.10.3
