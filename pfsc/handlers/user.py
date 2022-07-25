@@ -276,7 +276,9 @@ class SsnrRequestHandler(UserNotesHandler):
             }[activate]
             html = proxy_or_render(
                 conf_var, fn,
-                branding_img_url=check_config("LOGIN_PAGE_BRANDING_IMG_URL")
+                branding_img_url=check_config("LOGIN_PAGE_BRANDING_IMG_URL"),
+                tos_url=check_config("TOS_URL"),
+                prpo_url=check_config("PRPO_URL"),
             )
             self.set_response_field('conf_dialog_html', html)
 

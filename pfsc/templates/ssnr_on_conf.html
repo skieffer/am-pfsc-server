@@ -27,13 +27,23 @@
       WARNING: This will erase any notes you have currently saved in the browser!
     </b>
   </p>
-<p>
+<p style="font-size: 1.1em;">
 As an alternative to recording your study notes and checkmarks in the browser,
 you may opt in to having them recorded by the server. This is intended to overcome
 the inherent limitations of recording in the browser, such as the need to manage
 local storage, and dependence on which computer or browser you are using.
 </p>
-<p>
+{% if tos_url or prpo_url %}
+<p style="font-size: 1.1em;">
+By activating the service you agree to the
+{% if tos_url %}<a target="_blank" class="external" href="{{tos_url}}">Terms of Service</a>{% endif %}
+{% if tos_url and prpo_url %}and{% endif %}
+{% if prpo_url %}<a target="_blank" class="external" href="{{prpo_url}}">Privacy Policy</a>{% endif %}
+.
+</p>
+{% endif %}
+{% if not tos_url %}
+<p style="font-size: 1.1em;">
 THE SERVICE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
@@ -41,4 +51,5 @@ HOLDERS OR SERVICE PROVIDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 </p>
+{% endif %}
 </div>
