@@ -184,7 +184,7 @@ def test_build_release(app, repopath, version):
             rp, vers = stack.pop()
             repo = repos[rp]
             repo.lookup_dependencies()
-            deps = repo.deps.get(vers, {})
+            deps = repo.deps[vers].rhs if vers in repo.deps else {}
             prereqs = []
             for k, v in deps.items():
                 if f'{k}@{v}' not in repos_built:
