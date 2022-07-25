@@ -202,6 +202,9 @@ def build_all(verbose=True):
     app = make_app(ConfigName.LOCALDEV)
     # Ensure we are able to build:
     app.config["PERSONAL_SERVER_MODE"] = True
+    # Setting ALLOW_WIP to False makes this serve as a test of the
+    # `pfsc.lang.modules.inherit_release_build_signal()` function.
+    app.config["ALLOW_WIP"] = False
     with app.app_context():
         for repo in repos:
             for version in repo.tag_names:

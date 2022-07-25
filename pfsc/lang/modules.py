@@ -22,6 +22,8 @@ they declare, using the classes in the deductions and annotations (python) modul
 """
 
 import datetime, re
+import inspect
+import pathlib
 
 from lark import Lark
 from lark.exceptions import VisitError, LarkError
@@ -1098,6 +1100,26 @@ def remove_modules_from_cache(modpaths, version=pfsc.constants.WIP_TAG):
         if verspath in _MODULE_CACHE:
             del _MODULE_CACHE[verspath]
 
+
+def inherit_release_build_signal():
+    signal = None
+    p = pathlib.Path(__file__)
+    target_filename = str(p.parent.parent / 'build' / '__init__.py')
+    stack = inspect.stack()
+    for fi in stack:
+        if fi.filename == target_filename and fi.function in ['build', 'write_all']:
+            # See https://docs.python.org/3.8/library/inspect.html#the-interpreter-stack
+            # on why the try-finally with del frame is recommended for avoiding mem leak.
+            try:
+                frame = fi.frame
+                signal = frame.f_locals.get('building_a_release_of')
+                if signal is not None:
+                    break
+            finally:
+                del frame
+    return signal
+
+
 def load_module(path_spec, version=pfsc.constants.WIP_TAG, text=None, fail_gracefully=False, history=None, caching=CachePolicy.TIME, cache=_MODULE_CACHE):
     """
     This is how you get a PfscModule object, i.e. an internal representation of a pfsc module.
@@ -1150,10 +1172,13 @@ def load_module(path_spec, version=pfsc.constants.WIP_TAG, text=None, fail_grace
     # Grab the modpath.
     modpath = path_info.libpath
     repopath = get_repo_part(modpath)
-    if version == pfsc.constants.WIP_TAG and not have_repo_permission(
-            ActionType.READ, repopath, pfsc.constants.WIP_TAG):
-        msg = f'Insufficient permission to load `{modpath}` at WIP.'
-        raise PfscExcep(msg, PECode.INADEQUATE_PERMISSIONS)
+    if version == pfsc.constants.WIP_TAG:
+        if inherit_release_build_signal() != repopath and not have_repo_permission(
+            ActionType.READ, repopath, pfsc.constants.WIP_TAG
+        ):
+            msg = f'Insufficient permission to load `{modpath}` at WIP.'
+            raise PfscExcep(msg, PECode.INADEQUATE_PERMISSIONS)
+
     # Function for the case where the libpath fails to point to a .pfsc file:
     def fail(force_excep=False):
         if fail_gracefully and not force_excep:

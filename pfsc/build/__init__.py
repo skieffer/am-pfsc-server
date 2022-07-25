@@ -397,6 +397,13 @@ class Builder:
     def is_release_build(self):
         return self.version != pfsc.constants.WIP_TAG
 
+    def building_a_release_of(self):
+        """
+        Report the repopath of the repo of which we are building a release, or
+        None if we are not doing a release build.
+        """
+        return self.repo_info.libpath if self.is_release_build() else None
+
     def raise_missing_change_log_excep(self):
         msg = f'Repo `{self.module_path}` failed to declare a change log for release `{self.version}`'
         msg += ', which is a major version increment.'
@@ -422,6 +429,8 @@ class Builder:
         # Build only if have not yet built, or if forcing.
         if force or not self.have_built:
             with checkout(self.repo_info, self.version):
+                # Set signal visible below this frame by inspecting the stack.
+                building_a_release_of = self.building_a_release_of()
                 # Get path info.
                 path_info = PathInfo(self.module_path)
                 # Note: It was not until we checked out the intended version that we could construct
@@ -753,6 +762,8 @@ class Builder:
         # single checkout context in the latter. So we keep one checkout in Builder.build,
         # and put another one here.
         with checkout(self.repo_info, self.version):
+            # Set signal visible below this frame by inspecting the stack.
+            building_a_release_of = self.building_a_release_of()
             # How many writes do we have to do? (Count modules twice: once for lib dir, once for build dir.)
             n = 2*len(self.modules) + len(self.deductions) + len(self.annotations)
             self.monitor.set_num_writes(n)

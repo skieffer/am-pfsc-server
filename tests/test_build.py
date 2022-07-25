@@ -154,6 +154,7 @@ from tests.util import clear_all_indexing, get_basic_repos
 @pytest.mark.skip(reason="For manual testing only!")
 @pytest.mark.parametrize('repopath, version', [
     #['test.alex.math', 'v3.0.0'],
+    #['test.brook.math', 'v0.0.0'],
     #['test.moo.bar', 'v2.1.0'],
     ['test.moo.links', 'v0.1.0'],
     #['test.moo.bar', 'v0.3.4'],
@@ -180,6 +181,9 @@ def test_build_release(app, repopath, version):
         stack.extend([(rp, v) for v in versions])
     request_version(repopath, version)
     with app.app_context():
+        # Setting ALLOW_WIP to False makes this serve as a test of the
+        # `pfsc.lang.modules.inherit_release_build_signal()` function.
+        app.config["ALLOW_WIP"] = False
         while stack:
             rp, vers = stack.pop()
             repo = repos[rp]
