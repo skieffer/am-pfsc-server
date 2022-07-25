@@ -18,6 +18,7 @@
 
 """Utilities for RedisGraph. """
 
+from flask import has_app_context
 import neo4j
 from redis import Redis
 import redis.exceptions
@@ -30,6 +31,7 @@ from tenacity import (
     retry_if_exception_message
 )
 
+from pfsc import check_config
 from pfsc.constants import MAIN_TASK_QUEUE_NAME
 from pfsc.rq import get_rqueue
 
@@ -124,18 +126,25 @@ class RedisGraphWrapper:
         #self.execute_command("DISCARD")
         #self.has_open_transaction = False
 
+BGSAVE_IN_PROG = "Background save already in progress"
 
 @retry(
     stop=stop_after_attempt(RedisGraphWrapper.BGSAVE_RETRIES),
     wait=wait_exponential(multiplier=0.5, min=1, max=16),
     retry=(
         retry_if_exception_type(redis.exceptions.ResponseError) &
-        retry_if_exception_message("Background save already in progress")
+        retry_if_exception_message(BGSAVE_IN_PROG)
     )
 )
 def redis_bg_save(redis_uri):
     r = Redis.from_url(redis_uri)
-    r.execute_command("BGSAVE")
+    try:
+        r.execute_command("BGSAVE")
+    except redis.exceptions.ResponseError as e:
+        if str(e) == BGSAVE_IN_PROG and has_app_context() and check_config("TESTING"):
+            pass
+        else:
+            raise
 
 
 def prepare_redis_for_oca(app):

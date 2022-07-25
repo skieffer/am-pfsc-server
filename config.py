@@ -580,6 +580,7 @@ class OcaConfig(DockerDevConfig):
     This is intended for use by a single user, on their own machine.
     """
     IS_OCA = True
+    TESTING = False
     OCA_LATEST_VERSION_URL = 'https://raw.githubusercontent.com/alpinemath/pfsc-manage/main/topics/pfsc/oca_version.txt'
     OCA_VERSION_FILE = "/home/pfsc/VERSION.txt"
     EULA_FILE = "/home/pfsc/EULA.txt"
