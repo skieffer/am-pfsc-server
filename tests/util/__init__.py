@@ -17,6 +17,7 @@
 # --------------------------------------------------------------------------- #
 
 import os
+import re
 import tempfile
 
 from pfsc import make_app
@@ -71,7 +72,7 @@ def gather_repo_info():
                 # we used version dirs with names of the form `v\d+`.
                 # Post-multi-versioning, we use names that look like full version
                 # tags, vM.m.p. For backwards-compatibility, we accept both formats.
-                vers_dirs = os.listdir(SRC)
+                vers_dirs = [d for d in os.listdir(SRC) if re.match(r'v\d+', d)]
                 if 'v0' in vers_dirs:
                     vers_dirs.sort(key=lambda d: int(d[1:]))
                 else:
