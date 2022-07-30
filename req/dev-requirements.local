@@ -1,11 +1,14 @@
 # Dev requirements that are being installed locally,
 # i.e. from a neighboring directory, during development.
 
--e ../pfsc-test-modules/
-
 # Keeping in commented form some that we used to have. During development, may
 # once again need to install these editable, from local, working copy.
 
+#-e ../pfsc-test-modules/
 #-e ../pfsc-examp
 #-e ../displaylang
 #-e ../sympy
+
+# Even though this is not a local installation, keeping this one in this
+# file because it won't have a hash.
+git+https://github.com/alpinemath/pfsc-test-modules.git@v0.22.8
