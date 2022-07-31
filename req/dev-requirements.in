@@ -2,15 +2,9 @@
 #   These packages are useful or required in development, but are not
 #   necessary for a working app.
 
-# This line ensures consistency with the run requirements:
+# Ensure consistency:
 -c requirements.txt
+-c test-requirements.txt
 
 pip-tools==6.6.2
-pytest==6.2.3
-pytest-cov==2.11.1
 rq-dashboard==0.6.1
-typeguard==2.13.3
-
-pfsc-examp==0.22.7
-displaylang==0.22.7
-alpinemath-sympy==0.10.3

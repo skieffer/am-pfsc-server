@@ -11,5 +11,3 @@ pip install -r req/requirements.local
 
 pip install --no-deps -r req/test-requirements.txt
 pip install -r req/test-requirements.hashless
-
-pip install --no-deps -r req/dev-requirements.txt

@@ -16,18 +16,23 @@
 * `requirements.txt`: Automatically generated from `requirements.in` using the
   `pip-tools` package.
 
-There are also three corresponding files with the `dev-` prefix, which concern
-packages needed for development, but not required for the app to run:
+* `test-requirements.in`: Maually listed; required for testing.
 
-* `dev-requirements.in`
-* `dev-requirements.local`
-* `dev-requirements.txt`
+* `test-requirements.hashless`: Manually listed; lacking a hash.
+
+* `test-requirements.txt`: Generated from the `.in` file.
+
+* `dev-requirements.in`: Manually listed; required only for development.
+
+* `dev-requirements.txt`: Generated from the `.in` file.
 
 
 ## How to install packages
 
 What you need to do depends on whether you are setting up a development
-environment, or building a docker image to run the app.
+environment, or a testing environment, or building a docker image to run the
+app.
+
 
 ### Setting up a development environment
 
@@ -43,6 +48,18 @@ pip install -U pip
 (Note: If at some point we no longer need the `.nodeps` and `.local` files,
 we might change  the instructions here to using `pip-sync` (also included
 with `pip-tools`). See <https://pypi.org/project/pip-tools/>)
+
+
+### Setting up a testing environment
+
+Same, except run
+
+```shell
+./req/install_testing.sh
+```
+
+instead of `install.sh`.
+
 
 ### Building a docker image
 
