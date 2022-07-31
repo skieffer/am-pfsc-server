@@ -334,6 +334,9 @@ class ChartRequest(TypeRequest):
             if o is not None:
                 self.type_descrip['ordSel'] = o
 
+            G = loc.get('gid', 0)
+            self.type_descrip['gid'] = str(G)
+
             L = loc.get('layout_method')
             if L is not None:
                 L = self.coerce_key(L, ChartRequest.layout_method_lookup)
@@ -375,6 +378,10 @@ class ChartRequest(TypeRequest):
 
     def add_copath(self, copath):
         self.copaths.append(copath)
+
+    def extend_gid(self, salt):
+        if 'gid' in self.type_descrip:
+            self.type_descrip['gid'] += salt
 
     def finalize_libpaths(self):
         """
@@ -588,6 +595,9 @@ CODE_LOOKUP = {
     },
     # chart
     'c': {
+        # gid means forest group id
+        "G": 'gid',
+        # group means tab group
         'g': 'group',
         "L": 'layout_method',
         'o': 'ordSel',
@@ -613,6 +623,7 @@ CODE_REV_LOOKUP = {
     },
     # chart
     'c': {
+        'gid': "G",
         'group': 'g',
         'layout_method': "L",
         'ordSel': 'o',
