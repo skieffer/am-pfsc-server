@@ -19,6 +19,7 @@
 import traceback
 import json
 from collections import defaultdict
+from uuid import uuid4
 
 from flask import render_template, url_for, current_app
 from flask_login import current_user, logout_user
@@ -157,7 +158,12 @@ class AugLpSeq:
                     record_request_info(req)
 
         # Finalize chart requests.
+        gid_salt = f'-{uuid4()}'
         for req in located_chart_reqs:
+            # Forest group ids are salted so that if the app is loaded in two
+            # different windows, using the exact same URL args, corresponding
+            # forests in those windows do not wind up unintentionally linked.
+            req.extend_gid(gid_salt)
             req.finalize_libpaths()
             record_request_info(req)
 
@@ -353,6 +359,7 @@ class StateArgMaker(Handler):
         # lookup where we can obtain one (g, t) location where a given annotation,
         # identified by its repo-versioned libpath, can be found.
         anno_panes = {}
+        forest_groups = []
         total_tab_count = 0
         for g, tc in enumerate(tcs):
             active_tabs.append(tc.get('activeTab', 0))
@@ -404,6 +411,16 @@ class StateArgMaker(Handler):
                     ordSel = tab.get('ordSel')
                     if ordSel is not None:
                         codes['o'] = ordSel
+
+                    forest_gid = tab.get('gid')
+                    if forest_gid is None or forest_gid not in forest_groups:
+                        G = len(forest_groups)
+                        forest_groups.append(forest_gid)
+                    else:
+                        G = forest_groups.index(forest_gid)
+                    # For compression, we omit group #0. It is implied.
+                    if G > 0:
+                        codes['G'] = G
 
                     loc = LocDesc('c', codes)
                     for vlp in make_chart_vlps(tab):
