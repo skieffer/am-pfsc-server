@@ -822,6 +822,11 @@ class AppLoader(Handler):
                 return url_for('static', filename=f'whl/{t}')
             return t
 
+        pyodide_vers = check_config("PYODIDE_VERSION")
+        can_control_deps = int(pyodide_vers.split('.')[1]) >= 21
+        local_whl_filenames = check_config("LOCAL_WHL_FILENAMES")
+        micropip_no_deps = can_control_deps and len(local_whl_filenames) > 0
+
         examp_config = {
             "vars": {
                 "MAX_SYMPY_EXPR_LEN": check_config("MAX_SYMPY_EXPR_LEN"),
@@ -835,20 +840,17 @@ class AppLoader(Handler):
                 url_for('static', filename='mathworker.bundle.js')
             ),
 
-            # If the config var is defined, it should probably be something like:
-            #   https://cdn.jsdelivr.net/pyodide/v0.19.0/full/
             "pyodideIndexURL": (
-                check_config("PYODIDE_INDEX_URL") or
-                url_for('static', filename='pyodide/')
+                url_for('static', filename=f'pyodide/v{pyodide_vers}')
+                if check_config("PYODIDE_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/pyodide/v{pyodide_vers}/full/'
             ),
 
             "micropipInstallTargets": [
-                adapt_wheel_target(check_config(f'PYO_WHL_{name}'))
-                for name in [
-                    "PFSC_UTIL", "TYPEGUARD", "DISPLAYLANG",
-                    "SYMPY", "LARK", "PFSC_EXAMP",
-                ]
-            ],
+                adapt_wheel_target(fn) for fn in local_whl_filenames
+            ] or [f'pfsc-examp=={check_config("PFSC_EXAMP_VERS_NUM")}'],
+
+            "micropipNoDeps": micropip_no_deps,
         }
 
         html = render_template(

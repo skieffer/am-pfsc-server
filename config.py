@@ -172,35 +172,32 @@ class Config:
     ELK_JS_URL = os.getenv("ELK_JS_URL")
     # E.g. https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-svg.js
     MATHJAX_JS_URL = os.getenv("MATHJAX_JS_URL")
-    # E.g. https://cdn.jsdelivr.net/pyodide/v0.19.0/full/
-    PYODIDE_INDEX_URL = os.getenv("PYODIDE_INDEX_URL")
+
+    # E.g. 0.19.1
+    PYODIDE_VERSION = os.getenv("PYODIDE_VERSION")
+    # boolean
+    PYODIDE_SERVE_LOCALLY = bool(int(os.getenv("PYODIDE_SERVE_LOCALLY", 0)))
 
     # When loading locally from `/static/...`, some assets have a debug version.
     ELK_DEBUG = bool(int(os.getenv("ELK_DEBUG", 0)))
 
     # Micropip install targets:
-    # Python wheels loaded by Pyodide in the client can come from three different
-    # types of sources: (a) as a static asset served by pfsc-server, (b) from a
-    # CDN or other external URL, and (c) from PyPI. The defaults defined here are
-    # of type (a), which is useful when running the server locally. They are recognized
-    # as being of type (a), because they end with `.whl` and do *not* begin with `https:`.
-    # They give only the name of the whl file, which includes the desired version
-    # number for each package. These files must be made available in the `/whl` subdirectory
-    # of the server's static folder. The server will add the necessary prefix to make a
-    # full URL. If you want type (b), the string should end with `.whl` and begin with `https:`.
-    # For example,
-    #   https://cdn.jsdelivr.net/gh/alpinemath/sympy@1.11.dev0/sympy-1.11.dev0-py3-none-any.whl
-    # If you want type (c), use a <name>==<version> string as you would ordinarily pass to pip.
-    # For example,
-    #   typeguard==2.13.3
-    # For a type (c) installation to work, PyPI must be hosting a `-py3-none-any.whl` file
-    # for the requested version. (Check under the "Download files" tab on PyPI.)
-    PYO_WHL_PFSC_UTIL = os.getenv("PYO_WHL_PFSC_UTIL", "pfsc_util-0.22.0-py3-none-any.whl")
-    PYO_WHL_TYPEGUARD = os.getenv("PYO_WHL_TYPEGUARD", "typeguard-0.0.0-py3-none-any.whl")
-    PYO_WHL_DISPLAYLANG = os.getenv("PYO_WHL_DISPLAYLANG", "displaylang-0.1.0-py3-none-any.whl")
-    PYO_WHL_SYMPY = os.getenv("PYO_WHL_SYMPY", "sympy-1.11.dev0-py3-none-any.whl")
-    PYO_WHL_LARK = os.getenv("PYO_WHL_LARK", "lark067-0.6.7-py2.py3-none-any.whl")
-    PYO_WHL_PFSC_EXAMP = os.getenv("PYO_WHL_PFSC_EXAMP", "pfsc_examp-0.22.0-py3-none-any.whl")
+    #
+    # Python wheels will be loaded by Pyodide in the client in one of two ways:
+    # Either we pull pfsc-examp from PyPI, and let micropip automatically resolve
+    # its dependencies and pull those too from PyPI; or all wheels will be loaded
+    # via static URLs pointing into pfsc-server. Generally speaking, the former
+    # is what you want when running an online web app, while the latter is
+    # appropriate both when running the OCA, and during development.
+    #
+    # To load all wheels from PyPI, you must define PFSC_EXAMP_VERS_NUM,
+    # whose value should be a string like "0.22.7", and you must _not_ define
+    # LOCAL_WHL_FILENAMES.
+    #
+    # To load all wheels from pfsc-server via static URLs, define LOCAL_WHL_FILENAMES
+    # to be a comma-delimited list of wheel filenames, e.g. displaylang-0.1.0-py3-none-any.whl
+    PFSC_EXAMP_VERS_NUM = os.getenv("PFSC_EXAMP_VERS_NUM")
+    LOCAL_WHL_FILENAMES = parse_cd_list(os.getenv('LOCAL_WHL_FILENAMES', ''))
 
     # See <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy>
     REFERRER_POLICY = os.getenv("REFERRER_POLICY", 'no-referrer')
