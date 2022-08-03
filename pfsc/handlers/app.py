@@ -794,6 +794,9 @@ class AppLoader(Handler):
     def write_html(ISE_state):
         css = []
 
+        ise_bundle_filename = f'ise.bundle{".min." if check_config("ISE_SERVE_MINIFIED") else "."}js'
+        ise_vers = check_config("ISE_VERSION")
+
         js = [
             # MathJax
             (check_config("MATHJAX_JS_URL") or
@@ -809,8 +812,11 @@ class AppLoader(Handler):
             # url_for('static', filename='klay/klay.js'),
 
             # the ISE bundle
-            (check_config("ISE_JS_URL") or
-             url_for('static', filename='ise.bundle.js')),
+            (
+                url_for('static', filename=f'ise/v{ise_vers}/{ise_bundle_filename}')
+                if check_config("ISE_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/gh/alpinemath/pfsc-ise@{ise_vers}/dist/{ise_bundle_filename}'
+            ),
 
             # If we want to use pdfjs outside of iframes, might need sth like this:
             # url_for('static', filename='pdfjs/build/pdf.js'),
@@ -826,6 +832,7 @@ class AppLoader(Handler):
         can_control_deps = int(pyodide_vers.split('.')[1]) >= 21
         local_whl_filenames = check_config("LOCAL_WHL_FILENAMES")
         micropip_no_deps = can_control_deps and len(local_whl_filenames) > 0
+        mathworker_bundle_filename = f'mathworker.bundle{".min." if check_config("MATHWORKER_SERVE_MINIFIED") else "."}js'
 
         examp_config = {
             "vars": {
@@ -835,10 +842,7 @@ class AppLoader(Handler):
                 "MAX_DISPLAY_BUILD_DEPTH": check_config("MAX_DISPLAY_BUILD_DEPTH"),
             },
 
-            "mathworkerURL": (
-                check_config("ISE_MATHWORKER_JS_URL") or
-                url_for('static', filename='mathworker.bundle.js')
-            ),
+            "mathworkerURL": url_for('static', filename=f'ise/v{ise_vers}/{mathworker_bundle_filename}'),
 
             "pyodideIndexURL": (
                 url_for('static', filename=f'pyodide/v{pyodide_vers}')

@@ -124,6 +124,7 @@ def make_app(config_name=None):
     GRAPHDB_URI
     PFSC_LIB_ROOT
     SECRET_KEY
+    ISE_VERSION
     PYODIDE_VERSION
     """.split()
     num_ev = len(essential_vars)

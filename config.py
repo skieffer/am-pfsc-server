@@ -161,13 +161,15 @@ class Config:
     PROXY_FIX_PROTO = int(os.getenv("PROXY_FIX_PROTO", 0))
 
     # Static assets:
-    # The static assets can be served locally from `/static/...` URLs (the default),
-    # or from a CDN by setting alternative URLs here.
 
-    # E.g. https://cdn.jsdelivr.net/gh/alpinemath/pfsc-ise@22.8/dist/ise.bundle.min.js
-    ISE_JS_URL = os.getenv("ISE_JS_URL")
-    # E.g. https://cdn.jsdelivr.net/gh/alpinemath/pfsc-ise@22.8/dist/mathworker.bundle.min.js
-    ISE_MATHWORKER_JS_URL = os.getenv("ISE_MATHWORKER_JS_URL")
+    # E.g. 22.10
+    ISE_VERSION = os.getenv("ISE_VERSION")
+    # boolean: false means serve via jsdelivr
+    ISE_SERVE_LOCALLY = bool(int(os.getenv("ISE_SERVE_LOCALLY", 1)))
+    ISE_SERVE_MINIFIED = bool(int(os.getenv("ISE_SERVE_MINIFIED", 0)))
+
+    # Supporting JS modules can be served locally from `/static/...` URLs (the default),
+    # or from a CDN by setting alternative URLs here.
     # E.g. https://cdn.jsdelivr.net/npm/elkjs@0.8.1/lib/elk.bundled.js
     ELK_JS_URL = os.getenv("ELK_JS_URL")
     # E.g. https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-svg.js
@@ -175,8 +177,14 @@ class Config:
 
     # E.g. 0.19.1
     PYODIDE_VERSION = os.getenv("PYODIDE_VERSION")
-    # boolean
+    # boolean: false means serve via jsdelivr
     PYODIDE_SERVE_LOCALLY = bool(int(os.getenv("PYODIDE_SERVE_LOCALLY", 0)))
+
+    # Since a worker script must obey the same-origin policy
+    #   https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker
+    # we cannot serve the mathworker script over a CDN. However, we can decide
+    # whether to serve it minified or not.
+    MATHWORKER_SERVE_MINIFIED = bool(int(os.getenv("MATHWORKER_SERVE_MINIFIED", 1)))
 
     # When loading locally from `/static/...`, some assets have a debug version.
     ELK_DEBUG = bool(int(os.getenv("ELK_DEBUG", 0)))
@@ -495,6 +503,8 @@ class DevelopmentConfig(Config):
     EMAIL_BRANDING_IMG_TITLE = 'Some Website'
     HOSTING_PHRASE = 'on our website'
     HOSTING_REQ_REVIEWER_ADDRS = ['reviewer1@localhost', 'reviewer2@localhost']
+
+    MATHWORKER_SERVE_MINIFIED = bool(int(os.getenv("MATHWORKER_SERVE_MINIFIED", 0)))
 
 
 class LocalDevConfig(DevelopmentConfig):
