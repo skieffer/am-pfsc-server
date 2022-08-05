@@ -125,6 +125,8 @@ def make_app(config_name=None):
     PFSC_LIB_ROOT
     SECRET_KEY
     ISE_VERSION
+    ELKJS_VERSION
+    MATHJAX_VERSION
     PYODIDE_VERSION
     """.split()
     num_ev = len(essential_vars)

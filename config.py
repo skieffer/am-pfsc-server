@@ -168,12 +168,15 @@ class Config:
     ISE_SERVE_LOCALLY = bool(int(os.getenv("ISE_SERVE_LOCALLY", 1)))
     ISE_SERVE_MINIFIED = bool(int(os.getenv("ISE_SERVE_MINIFIED", 0)))
 
-    # Supporting JS modules can be served locally from `/static/...` URLs (the default),
-    # or from a CDN by setting alternative URLs here.
-    # E.g. https://cdn.jsdelivr.net/npm/elkjs@0.8.1/lib/elk.bundled.js
-    ELK_JS_URL = os.getenv("ELK_JS_URL")
-    # E.g. https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-svg.js
-    MATHJAX_JS_URL = os.getenv("MATHJAX_JS_URL")
+    # E.g. 0.8.1
+    ELKJS_VERSION = os.getenv("ELKJS_VERSION")
+    # boolean: false means serve via jsdelivr
+    ELKJS_SERVE_LOCALLY = bool(int(os.getenv("ELKJS_SERVE_LOCALLY", 0)))
+
+    # E.g. 3.0.1
+    MATHJAX_VERSION = os.getenv("MATHJAX_VERSION")
+    # boolean: false means serve via jsdelivr
+    MATHJAX_SERVE_LOCALLY = bool(int(os.getenv("MATHJAX_SERVE_LOCALLY", 0)))
 
     # E.g. 0.19.1
     PYODIDE_VERSION = os.getenv("PYODIDE_VERSION")
@@ -609,8 +612,10 @@ class OcaConfig(DockerDevConfig):
     APP_URL_PREFIX = "/ProofscapeISE"
 
     ISE_SERVE_LOCALLY = True
-    ISE_SERVE_MINIFIED = False
+    ELKJS_SERVE_LOCALLY = True
+    MATHJAX_SERVE_LOCALLY = True
     PYODIDE_SERVE_LOCALLY = True
+    ISE_SERVE_MINIFIED = False
     MATHWORKER_SERVE_MINIFIED = False
 
     # Later we may set up demo repos for use in the OCA, but for now it's disabled.

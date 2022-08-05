@@ -796,18 +796,26 @@ class AppLoader(Handler):
 
         ise_bundle_filename = f'ise.bundle{".min." if check_config("ISE_SERVE_MINIFIED") else "."}js'
         ise_vers = check_config("ISE_VERSION")
+        elk_vers = check_config("ELKJS_VERSION")
+        mathjax_vers = check_config("MATHJAX_VERSION")
 
         js = [
             # MathJax
-            (check_config("MATHJAX_JS_URL") or
-             url_for('static', filename='mathjax/tex-svg.js')),
+            (
+                url_for('static', filename=f'mathjax/v{mathjax_vers}/tex-svg.js')
+                if check_config("MATHJAX_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/npm/mathjax@{mathjax_vers}/es5/tex-svg.js'
+            ),
 
             # ELK.js
-            (check_config("ELK_JS_URL") or
-             url_for(
-                 'static',
-                 filename=f'elk/elk{"-api" if check_config("ELK_DEBUG") else ".bundled"}.js'
-             )),
+            (
+                url_for(
+                    'static',
+                    filename=f'elk/v{elk_vers}/elk{"-api" if check_config("ELK_DEBUG") else ".bundled"}.js'
+                )
+                if check_config("ELKJS_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/npm/elkjs@{elk_vers}/lib/elk.bundled.js'
+            ),
             # If using KLay instead of ELK:
             # url_for('static', filename='klay/klay.js'),
 
