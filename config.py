@@ -162,24 +162,20 @@ class Config:
 
     # Static assets:
 
-    # E.g. 22.10
-    ISE_VERSION = os.getenv("ISE_VERSION")
+    ISE_VERSION = os.getenv("ISE_VERSION", "23.0")
     # boolean: false means serve via jsdelivr
     ISE_SERVE_LOCALLY = bool(int(os.getenv("ISE_SERVE_LOCALLY", 1)))
     ISE_SERVE_MINIFIED = bool(int(os.getenv("ISE_SERVE_MINIFIED", 0)))
 
-    # E.g. 0.8.1
-    ELKJS_VERSION = os.getenv("ELKJS_VERSION")
+    ELKJS_VERSION = os.getenv("ELKJS_VERSION", "0.8.1")
     # boolean: false means serve via jsdelivr
     ELKJS_SERVE_LOCALLY = bool(int(os.getenv("ELKJS_SERVE_LOCALLY", 0)))
 
-    # E.g. 3.0.1
-    MATHJAX_VERSION = os.getenv("MATHJAX_VERSION")
+    MATHJAX_VERSION = os.getenv("MATHJAX_VERSION", "3.0.1")
     # boolean: false means serve via jsdelivr
     MATHJAX_SERVE_LOCALLY = bool(int(os.getenv("MATHJAX_SERVE_LOCALLY", 0)))
 
-    # E.g. 0.19.1
-    PYODIDE_VERSION = os.getenv("PYODIDE_VERSION")
+    PYODIDE_VERSION = os.getenv("PYODIDE_VERSION", "0.21.0")
     # boolean: false means serve via jsdelivr
     PYODIDE_SERVE_LOCALLY = bool(int(os.getenv("PYODIDE_SERVE_LOCALLY", 0)))
 
@@ -207,7 +203,7 @@ class Config:
     #
     # To load all wheels from pfsc-server via static URLs, define LOCAL_WHL_FILENAMES
     # to be a comma-delimited list of wheel filenames, e.g. displaylang-0.1.0-py3-none-any.whl
-    PFSC_EXAMP_VERS_NUM = os.getenv("PFSC_EXAMP_VERS_NUM")
+    PFSC_EXAMP_VERS_NUM = os.getenv("PFSC_EXAMP_VERS_NUM", "0.22.7")
     LOCAL_WHL_FILENAMES = parse_cd_list(os.getenv('LOCAL_WHL_FILENAMES', ''))
 
     # See <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy>

@@ -124,10 +124,6 @@ def make_app(config_name=None):
     GRAPHDB_URI
     PFSC_LIB_ROOT
     SECRET_KEY
-    ISE_VERSION
-    ELKJS_VERSION
-    MATHJAX_VERSION
-    PYODIDE_VERSION
     """.split()
     num_ev = len(essential_vars)
     # Some config vars can be undefined in development, but must have a value
@@ -150,13 +146,6 @@ def make_app(config_name=None):
     # one of these two things is true:
     if not app.config.get("BUILD_IN_GDB") and not app.config.get("PFSC_BUILD_ROOT"):
         msg = 'Either `PFSC_BUILD_ROOT` must be defined, or `BUILD_IN_GDB` must be enabled.'
-        msg += ' Review app configuration.'
-        raise PfscExcep(msg, PECode.ESSENTIAL_CONFIG_VAR_UNDEFINED)
-
-    # Wheels?
-    # Either they must all come from PyPI, or must be served locally.
-    if not app.config.get("PFSC_EXAMP_VERS_NUM") and not app.config.get("LOCAL_WHL_FILENAMES"):
-        msg = 'Either `PFSC_EXAMP_VERS_NUM` or `LOCAL_WHL_FILENAMES` must be defined.'
         msg += ' Review app configuration.'
         raise PfscExcep(msg, PECode.ESSENTIAL_CONFIG_VAR_UNDEFINED)
 
