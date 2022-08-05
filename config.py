@@ -608,6 +608,11 @@ class OcaConfig(DockerDevConfig):
     # Browser Extension).
     APP_URL_PREFIX = "/ProofscapeISE"
 
+    ISE_SERVE_LOCALLY = True
+    ISE_SERVE_MINIFIED = False
+    PYODIDE_SERVE_LOCALLY = True
+    MATHWORKER_SERVE_MINIFIED = False
+
     # Later we may set up demo repos for use in the OCA, but for now it's disabled.
     # Issues include:
     #  * shouldn't try to delete after 24h (or ever), because
