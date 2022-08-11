@@ -89,7 +89,7 @@ from lark import Lark, Transformer
 import pfsc.constants
 from pfsc.build.versions import VersionTag
 from pfsc.build.lib.libpath import get_modpath
-from pfsc.build.repo import parse_repo_versioned_libpath
+from pfsc.build.repo import parse_repo_versioned_libpath, make_repo_versioned_libpath
 from pfsc.excep import PfscExcep, PECode
 from pfsc.session import make_demo_user_path
 
@@ -400,6 +400,10 @@ class AugmentedLibpath:
         :param libpath: str
         :param codes: list of TreeCode instances
         """
+        # Ensure that we have a version, using default for repo if necessary.
+        libpath, version = parse_repo_versioned_libpath(libpath, provide_default=True)
+        libpath = make_repo_versioned_libpath(libpath, version)
+
         self.libpath = libpath
         self.codes = codes
 
