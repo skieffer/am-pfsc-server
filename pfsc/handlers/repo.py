@@ -28,7 +28,6 @@ from pfsc.excep import PfscExcep, PECode
 from pfsc.handlers import RepoTaskHandler
 from pfsc.checkinput import IType
 from pfsc.checkinput.version import check_full_version
-from pfsc.gdb import get_graph_reader
 from pfsc.build import build_module, build_release
 from pfsc.build.manifest import has_manifest, load_manifest
 from pfsc.build.repo import RepoInfo
@@ -102,15 +101,7 @@ class RepoLoader(RepoTaskHandler):
         self.repo_info = ri = RepoInfo(repopath.value)
 
         if vers is None:
-            # If client didn't specify a version, we have to select the default.
-            vers_str = pfsc.constants.WIP_TAG
-            if ri.is_demo():
-                # Default version is always WIP, for a demo repo.
-                pass
-            elif check_config("DEFAULT_REPO_VERSION_IS_LATEST_RELEASE"):
-                vi = get_graph_reader().get_versions_indexed(repopath.value, include_wip=False)
-                if len(vi) > 0:
-                    vers_str = vi[-1].get('version', pfsc.constants.WIP_TAG)
+            vers_str = ri.get_default_version()
             vers = check_full_version('', vers_str, {})
         self.version = vers.full
         self.is_wip = vers.isWIP

@@ -117,6 +117,24 @@ class RepoInfo:
             pfsc.constants.SHADOW_PREFIX + self.project
         )
 
+    def get_default_version(self):
+        """
+        Determine the default version for this repo (which means the version to
+        be loaded/opened if the user failed to specify a version).
+
+        :return: full version string
+        """
+        vers_str = pfsc.constants.WIP_TAG
+        if self.is_demo():
+            # Default version is always WIP, for a demo repo.
+            pass
+        elif check_config("DEFAULT_REPO_VERSION_IS_LATEST_RELEASE"):
+            from pfsc.gdb import get_graph_reader
+            vi = get_graph_reader().get_versions_indexed(self.libpath, include_wip=False)
+            if len(vi) > 0:
+                vers_str = vi[-1].get('version', pfsc.constants.WIP_TAG)
+        return vers_str
+
     def clean(self):
         # Note: This is only used by testing code (not in production), so it is
         # okay to use CLI git here.
