@@ -197,13 +197,13 @@ class Config:
     # is what you want when running an online web app, while the latter is
     # appropriate both when running the OCA, and during development.
     #
-    # To load all wheels from PyPI, you must define PFSC_EXAMP_VERS_NUM,
+    # To load all wheels from PyPI, you must define PFSC_EXAMP_VERSION,
     # whose value should be a string like "0.22.7", and you must _not_ define
     # LOCAL_WHL_FILENAMES.
     #
     # To load all wheels from pfsc-server via static URLs, define LOCAL_WHL_FILENAMES
     # to be a comma-delimited list of wheel filenames, e.g. displaylang-0.1.0-py3-none-any.whl
-    PFSC_EXAMP_VERS_NUM = os.getenv("PFSC_EXAMP_VERS_NUM", "0.22.7")
+    PFSC_EXAMP_VERSION = os.getenv("PFSC_EXAMP_VERSION", "0.22.7")
     LOCAL_WHL_FILENAMES = parse_cd_list(os.getenv('LOCAL_WHL_FILENAMES', ''))
 
     # See <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy>

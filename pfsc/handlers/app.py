@@ -860,7 +860,7 @@ class AppLoader(Handler):
 
             "micropipInstallTargets": [
                 adapt_wheel_target(fn) for fn in local_whl_filenames
-            ] or [f'pfsc-examp=={check_config("PFSC_EXAMP_VERS_NUM")}'],
+            ] or [f'pfsc-examp=={check_config("PFSC_EXAMP_VERSION")}'],
 
             "micropipNoDeps": micropip_no_deps,
         }
