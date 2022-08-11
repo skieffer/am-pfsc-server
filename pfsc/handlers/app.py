@@ -794,23 +794,37 @@ class AppLoader(Handler):
     def write_html(ISE_state):
         css = []
 
+        ise_bundle_filename = f'ise.bundle{".min." if check_config("ISE_SERVE_MINIFIED") else "."}js'
+        ise_vers = check_config("ISE_VERSION")
+        elk_vers = check_config("ELKJS_VERSION")
+        mathjax_vers = check_config("MATHJAX_VERSION")
+
         js = [
             # MathJax
-            (check_config("MATHJAX_JS_URL") or
-             url_for('static', filename='mathjax/tex-svg.js')),
+            (
+                url_for('static', filename=f'mathjax/v{mathjax_vers}/tex-svg.js')
+                if check_config("MATHJAX_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/npm/mathjax@{mathjax_vers}/es5/tex-svg.js'
+            ),
 
             # ELK.js
-            (check_config("ELK_JS_URL") or
-             url_for(
-                 'static',
-                 filename=f'elk/elk{"-api" if check_config("ELK_DEBUG") else ".bundled"}.js'
-             )),
+            (
+                url_for(
+                    'static',
+                    filename=f'elk/v{elk_vers}/elk{"-api" if check_config("ELK_DEBUG") else ".bundled"}.js'
+                )
+                if check_config("ELKJS_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/npm/elkjs@{elk_vers}/lib/elk.bundled.js'
+            ),
             # If using KLay instead of ELK:
             # url_for('static', filename='klay/klay.js'),
 
             # the ISE bundle
-            (check_config("ISE_JS_URL") or
-             url_for('static', filename='ise.bundle.js')),
+            (
+                url_for('static', filename=f'ise/v{ise_vers}/{ise_bundle_filename}')
+                if check_config("ISE_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/gh/alpinemath/pfsc-ise@{ise_vers}/dist/{ise_bundle_filename}'
+            ),
 
             # If we want to use pdfjs outside of iframes, might need sth like this:
             # url_for('static', filename='pdfjs/build/pdf.js'),
@@ -822,6 +836,12 @@ class AppLoader(Handler):
                 return url_for('static', filename=f'whl/{t}')
             return t
 
+        pyodide_vers = check_config("PYODIDE_VERSION")
+        can_control_deps = int(pyodide_vers.split('.')[1]) >= 21
+        local_whl_filenames = check_config("LOCAL_WHL_FILENAMES")
+        micropip_no_deps = can_control_deps and len(local_whl_filenames) > 0
+        mathworker_bundle_filename = f'mathworker.bundle{".min." if check_config("MATHWORKER_SERVE_MINIFIED") else "."}js'
+
         examp_config = {
             "vars": {
                 "MAX_SYMPY_EXPR_LEN": check_config("MAX_SYMPY_EXPR_LEN"),
@@ -830,25 +850,19 @@ class AppLoader(Handler):
                 "MAX_DISPLAY_BUILD_DEPTH": check_config("MAX_DISPLAY_BUILD_DEPTH"),
             },
 
-            "mathworkerURL": (
-                check_config("ISE_MATHWORKER_JS_URL") or
-                url_for('static', filename='mathworker.bundle.js')
-            ),
+            "mathworkerURL": url_for('static', filename=f'ise/v{ise_vers}/{mathworker_bundle_filename}'),
 
-            # If the config var is defined, it should probably be something like:
-            #   https://cdn.jsdelivr.net/pyodide/v0.19.0/full/
             "pyodideIndexURL": (
-                check_config("PYODIDE_INDEX_URL") or
-                url_for('static', filename='pyodide/')
+                url_for('static', filename=f'pyodide/v{pyodide_vers}')
+                if check_config("PYODIDE_SERVE_LOCALLY") else
+                f'https://cdn.jsdelivr.net/pyodide/v{pyodide_vers}/full/'
             ),
 
             "micropipInstallTargets": [
-                adapt_wheel_target(check_config(f'PYO_WHL_{name}'))
-                for name in [
-                    "PFSC_UTIL", "TYPEGUARD", "DISPLAYLANG",
-                    "SYMPY", "LARK", "PFSC_EXAMP",
-                ]
-            ],
+                adapt_wheel_target(fn) for fn in local_whl_filenames
+            ] or [f'pfsc-examp=={check_config("PFSC_EXAMP_VERSION")}'],
+
+            "micropipNoDeps": micropip_no_deps,
         }
 
         html = render_template(

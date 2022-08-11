@@ -19,7 +19,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% with ise_vers = config["ISE_VERSION"] %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='ise/v'+ise_vers+'/favicon.ico') }}">
+    {% endwith %}
     {% if title %}
         <title>{{ title }}</title>
     {% else %}
