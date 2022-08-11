@@ -539,15 +539,22 @@ def make_repo_versioned_libpath(libpath, version):
     return f'{repo_part}@{version.replace(".", "_")}{libpath[len(repo_part):]}'
 
 
-def parse_repo_versioned_libpath(rvlp):
+def parse_repo_versioned_libpath(rvlp, provide_default=False):
     """
     :param rvlp: a repo-versioned libpath
+    :param provide_default: if True, and the supposed repo-versioned libpath
+        in fact fails to include a version, then we provide the default version
+        for this repo; if False, we instead raise an exception.
     :return: pair libpath, version
     """
     versioned_repo_part = get_repo_part(rvlp)
     p = versioned_repo_part.split("@")
     if len(p) != 2:
-        raise PfscExcep(f"Malformed versioned segment: `{versioned_repo_part}`", PECode.MALFORMED_VERSIONED_LIBPATH)
+        if len(p) == 1 and provide_default:
+            ri = RepoInfo(p[0])
+            p.append(ri.get_default_version())
+        else:
+            raise PfscExcep(f"Malformed versioned segment: `{versioned_repo_part}`", PECode.MALFORMED_VERSIONED_LIBPATH)
     repo_part, underscore_version = p
     remainder = rvlp[len(versioned_repo_part):]
     libpath = repo_part + remainder

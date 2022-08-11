@@ -349,6 +349,74 @@ gen_args_3 = {
     "c": "test.hist.lit@3_1_4.H.ilbert.ZB~b.Thm9.Pf~c(g0t0*g1t0G1*g1t1G1)"
 }
 
+# This one is the same as state_2, except that the version is WIP.
+# This is for testing that the default version will be provided if omitted in
+# the original URL args. Note that in the generated version of the args, the
+# `@W` version has been added for us.
+args_4 = {
+    "a": "0;0",
+    "c": "test.hist.lit.H.ilbert.ZB~b.Thm9.Pf~c(g0t0)"
+}
+gen_args_4 = {
+    "a": "0;0",
+    "c": "test.hist.lit@W.H.ilbert.ZB~b.Thm9.Pf~c(g0t0)"
+}
+state_4 = """\
+{
+    "autoSaveDelay": 30000,
+    "reloadFromDisk": "auto",
+    "saveAllOnAppBlur": true,
+    "enablePdfProxy": false,
+    "offerPdfLibrary": false,
+    "allowWIP": true,
+    "appUrlPrefix": "",
+    "devMode": false,
+    "personalServerMode": false,
+    "ssnrAvailable": false,
+    "hostingByRequest": true,
+    "tosURL": null,
+    "tosVersion": null,
+    "prpoURL": null,
+    "prpoVersion": null,
+    "err_lvl": 0,
+    "content": {
+        "tctStructure": [
+            "L"
+        ],
+        "tctSizeFractions": [],
+        "activeTcIndex": 0,
+        "tcs": [
+            {
+                "tabs": [
+                    {
+                        "type": "CHART",
+                        "on_board": [
+                            "test.hist.lit.H.ilbert.ZB.Thm9.Pf"
+                        ],
+                        "versions": {
+                            "test.hist.lit.H.ilbert.ZB.Thm9.Pf": "WIP"
+                        },
+                        "gid": "0"
+                    }
+                ],
+                "activeTab": 0
+            }
+        ]
+    },
+    "trees": {
+        "trees": {
+            "test.hist.lit@WIP": {
+                "expand": {
+                    "buildNodeIds": [
+                        "test.hist.lit.H.ilbert.ZB"
+                    ]
+                }
+            }
+        }
+    }
+}"""
+
+
 def normalize_gids(state):
     gids = []
     for tc in state["content"]["tcs"]:
@@ -376,6 +444,7 @@ def normalize_gids(state):
     (args_1, state_1),
     (gen_args_2, state_2),
     (gen_args_3, state_3),
+    (args_4, state_4),
 ))
 def test_app_loader(app, args, expected):
     with app.app_context():
@@ -412,6 +481,7 @@ def test_app_loader_2(app):
     (state_1, gen_args_1),
     (state_2, gen_args_2),
     (state_3, gen_args_3),
+    (state_4, gen_args_4),
 ))
 def test_arg_maker(app, state, expected):
     print()
