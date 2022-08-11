@@ -33,4 +33,4 @@ bp = Blueprint('docs', __name__)
 
 @bp.route('/Tutorial', methods=["GET"])
 def zb119_tutorial():
-    return redirect('https://pise.alpinemath.org/?sd=c289&tt=b&a=0;0&c=gh.alpinemath.docs@0_1_0.pise.tutorial.zb119~b.tutorial~a(g0t0)')
+    return redirect('/?sd=c289&tt=b&a=0;0&c=gh.alpinemath.docs.pise.tutorial.zb119~b.tutorial~a(g0t0)')
