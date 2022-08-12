@@ -250,6 +250,13 @@ class RepoInfo:
             self.version_tag_names = [tag.get_name() for tag in tags]
         return tags
 
+    def has_version_tag(self, tag_name):
+        """
+        Pass a string, e.g. 'v1.2.3', to check whether this currently exists as
+        a version tag in the repo.
+        """
+        return tag_name in [t.name for t in self.get_all_version_tags_in_increasing_order()]
+
     def get_build_dir(self, version=pfsc.constants.WIP_TAG):
         build_root = check_config("PFSC_BUILD_ROOT")
         build_dir = os.path.join(

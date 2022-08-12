@@ -277,6 +277,33 @@ class RepoLoader(RepoTaskHandler):
             raise PfscExcep(msg, PECode.REMOTE_REPO_ERROR)
         return clone
 
+    def fetch(self, remote_name='origin'):
+        try:
+            remote = self.repo_info.git_repo.remotes[remote_name]
+        except KeyError:
+            msg = f'Repo {self.repo_info.libpath} has no remote "{remote_name}"'
+            raise PfscExcep(msg, PECode.REMOTE_REPO_ERROR)
+
+        self.action = 'Fetching... '
+        pm = ProgMon(self)
+        # In testing, found it could take two attempts for fetch to work. On
+        # first attempt, get "_pygit2.GitError: SecureTransport error: connection closed via error",
+        # then second attempt works. This was in manual testing, and only after waiting
+        # several minutes between forming the Repository object, and calling fetch.
+        # So we might not encounter it in practice, but to be on the safe side
+        # we give it several tries before actually calling it an error.
+        for i in range(5):
+            try:
+                t_prog = remote.fetch(callbacks=pm)
+            except GitError as e:
+                pass
+            else:
+                break
+        else:
+            msg = f'Error while attempting to fetch from remote repo:\n{e}'
+            raise PfscExcep(msg, PECode.REMOTE_REPO_ERROR)
+        return t_prog
+
     def check_hash(self):
         if self.required_hash:
             actual_hash = self.repo_info.get_hash_of_ref(self.version)
@@ -292,6 +319,9 @@ class RepoLoader(RepoTaskHandler):
         if self.version == pfsc.constants.WIP_TAG:
             return build_module(self.repo_info.libpath, recursive=True, progress=self.update)
         else:
+            if not self.repo_info.has_version_tag(self.version):
+                self.fetch()
+                self.action = ''
             self.check_hash()
             return build_release(self.repo_info.libpath, self.version, progress=self.update)
 
