@@ -243,6 +243,10 @@ class RepoLoader(RepoTaskHandler):
             built = False
             if self.will_clone:
                 self.clone()
+                # Our RepoInfo currently thinks the directory is not a git repo,
+                # since, until now, there was nothing there. We need it to recognize
+                # that there is now a repo there, so we ask it to check the libpath again.
+                self.repo_info.check_libpath()
                 cloned = True
                 self.set_response_field('cloned', True)
             if self.will_make_demo:
